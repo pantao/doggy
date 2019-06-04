@@ -1,0 +1,38 @@
+{
+  "name": "doggy-toolkit",
+  "version": "0.0.0-development",
+  "description": "Doggy Toolkit",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc",
+    "watch": "yarn test --watch",
+    "setup": "yarn install && npx npm-install-peers",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pantao/doggy.git"
+  },
+  "keywords": [
+    "Utils",
+    "Utilities",
+    "Helpers"
+  ],
+  "author": {
+    "name": "pantao",
+    "email": "ofcrab@gmail.com",
+    "url": "https://pantao.parcmg.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pantao/doggy/issues"
+  },
+  "homepage": "https://github.com/pantao/doggy#readme",
+  "devDependencies": {
+    "@types/jest": "^24.0.13",
+    "@types/node": "^12.0.4",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.1"
+  }
+}
