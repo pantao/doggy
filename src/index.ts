@@ -6,6 +6,7 @@ import * as constants from "./constants";
 import * as patterns from "./patterns";
 import * as utils from "./utils";
 import * as validators from "./validators";
+import luhn from "./luhn";
 
 export {
   formatters,
@@ -15,7 +16,8 @@ export {
   constants,
   patterns,
   utils,
-  validators
+  validators,
+  luhn
 };
 
 export default {
@@ -26,5 +28,6 @@ export default {
   constants,
   patterns,
   utils,
-  validators
+  validators,
+  luhn
 };

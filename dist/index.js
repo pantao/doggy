@@ -6,6 +6,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var formatters = __importStar(require("./formatters"));
 exports.formatters = formatters;
@@ -23,6 +26,8 @@ var utils = __importStar(require("./utils"));
 exports.utils = utils;
 var validators = __importStar(require("./validators"));
 exports.validators = validators;
+var luhn_1 = __importDefault(require("./luhn"));
+exports.luhn = luhn_1.default;
 exports.default = {
     formatters: formatters,
     is: is,
@@ -31,5 +36,6 @@ exports.default = {
     constants: constants,
     patterns: patterns,
     utils: utils,
-    validators: validators
+    validators: validators,
+    luhn: luhn_1.default
 };

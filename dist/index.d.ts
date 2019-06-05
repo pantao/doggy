@@ -6,7 +6,8 @@ import * as constants from "./constants";
 import * as patterns from "./patterns";
 import * as utils from "./utils";
 import * as validators from "./validators";
-export { formatters, is, object, base64, constants, patterns, utils, validators };
+import luhn from "./luhn";
+export { formatters, is, object, base64, constants, patterns, utils, validators, luhn };
 declare const _default: {
     formatters: typeof formatters;
     is: typeof is;
@@ -16,6 +17,10 @@ declare const _default: {
     patterns: typeof patterns;
     utils: typeof utils;
     validators: typeof validators;
+    luhn: {
+        validate: (rawValue: any) => boolean;
+        generate: (rawValue: any) => string;
+    };
 };
 export default _default;
 //# sourceMappingURL=index.d.ts.map
