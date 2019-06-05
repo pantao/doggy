@@ -1,6 +1,10 @@
 export declare const MOBILE_LOOSE: RegExp;
 export declare const MOBILE_STRICT: RegExp;
 /**
+ * 中华人民共和国，居民身份证号
+ */
+export declare const PRC_CITIZEN_ID: RegExp;
+/**
  * 只包含数字的字符验证正则
  */
 export declare const INTEGER: RegExp;

@@ -21,6 +21,8 @@ var patterns = __importStar(require("./patterns"));
 exports.patterns = patterns;
 var utils = __importStar(require("./utils"));
 exports.utils = utils;
+var validators = __importStar(require("./validators"));
+exports.validators = validators;
 exports.default = {
     formatters: formatters,
     is: is,
@@ -28,5 +30,6 @@ exports.default = {
     base64: base64,
     constants: constants,
     patterns: patterns,
-    utils: utils
+    utils: utils,
+    validators: validators
 };

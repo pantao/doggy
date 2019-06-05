@@ -137,4 +137,9 @@ export declare const regexp: IsFunction;
  * @param {any} value 待检测的值
  */
 export declare const printableChar: IsFunction;
+/**
+ * 是否为中华人民共和国居民身份证号码
+ * @param value any
+ */
+export declare const prcCitizenID: IsFunction;
 //# sourceMappingURL=is.d.ts.map

@@ -8,6 +8,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var patterns = __importStar(require("./patterns"));
+var validators_1 = require("./validators");
 /**
  * 检测一个字符串是否为手机号
  *
@@ -204,4 +205,12 @@ exports.printableChar = function (value) {
         (value > 95 && value < 112) || // 数字键盘
         (value > 185 && value < 193) || // ;=,-./`
         (value > 218 && value < 223);
+};
+/**
+ * 是否为中华人民共和国居民身份证号码
+ * @param value any
+ */
+exports.prcCitizenID = function (value, strict) {
+    if (strict === void 0) { strict = true; }
+    return strict ? validators_1.prcCitizenID(value) : patterns.PRC_CITIZEN_ID.test(value);
 };

@@ -1,4 +1,5 @@
 import * as patterns from "./patterns";
+import { prcCitizenID as validatePRCCitizenID } from "./validators";
 export type IsFunction = (value: any, ...options: any) => boolean;
 
 /**
@@ -210,3 +211,10 @@ export const printableChar: IsFunction = (value: any) =>
   (value > 95 && value < 112) || // 数字键盘
   (value > 185 && value < 193) || // ;=,-./`
   (value > 218 && value < 223);
+
+/**
+ * 是否为中华人民共和国居民身份证号码
+ * @param value any
+ */
+export const prcCitizenID: IsFunction = (value: any, strict = true) =>
+  strict ? validatePRCCitizenID(value) : patterns.PRC_CITIZEN_ID.test(value);
