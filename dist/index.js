@@ -32,6 +32,10 @@ var datetime = __importStar(require("./datetime"));
 exports.datetime = datetime;
 var luhn_1 = __importDefault(require("./luhn"));
 exports.luhn = luhn_1.default;
+var UrlTemplate_1 = __importDefault(require("./UrlTemplate"));
+exports.UrlTemplate = UrlTemplate_1.default;
+var Currency_1 = __importDefault(require("./Currency"));
+exports.Currency = Currency_1.default;
 exports.default = {
     formatters: formatters,
     is: is,
@@ -43,5 +47,7 @@ exports.default = {
     patterns: patterns,
     utils: utils,
     validators: validators,
-    luhn: luhn_1.default
+    luhn: luhn_1.default,
+    UrlTemplate: UrlTemplate_1.default,
+    Currency: Currency_1.default
 };

@@ -9,7 +9,9 @@ import * as validators from "./validators";
 import * as to from "./to";
 import * as datetime from "./datetime";
 import luhn from "./luhn";
-export { formatters, is, to, datetime, object, base64, constants, patterns, utils, validators, luhn };
+import UrlTemplate from "./UrlTemplate";
+import Currency from "./Currency";
+export { formatters, is, to, datetime, object, base64, constants, patterns, utils, validators, luhn, UrlTemplate, Currency };
 declare const _default: {
     formatters: typeof formatters;
     is: typeof is;
@@ -25,6 +27,8 @@ declare const _default: {
         validate: (rawValue: any) => boolean;
         generate: (rawValue: any) => string;
     };
+    UrlTemplate: typeof UrlTemplate;
+    Currency: typeof Currency;
 };
 export default _default;
 //# sourceMappingURL=index.d.ts.map

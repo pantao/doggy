@@ -8,7 +8,11 @@ import * as utils from "./utils";
 import * as validators from "./validators";
 import * as to from "./to";
 import * as datetime from "./datetime";
+
 import luhn from "./luhn";
+
+import UrlTemplate from "./UrlTemplate";
+import Currency from "./Currency";
 
 export {
   formatters,
@@ -21,7 +25,9 @@ export {
   patterns,
   utils,
   validators,
-  luhn
+  luhn,
+  UrlTemplate,
+  Currency
 };
 
 export default {
@@ -35,5 +41,7 @@ export default {
   patterns,
   utils,
   validators,
-  luhn
+  luhn,
+  UrlTemplate,
+  Currency
 };
