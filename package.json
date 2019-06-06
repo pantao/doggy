@@ -1,6 +1,6 @@
 {
   "name": "doggy-toolkit",
-  "version": "0.0.2-development",
+  "version": "0.0.3-development",
   "description": "Doggy Toolkit",
   "main": "dist/index.js",
   "scripts": {
