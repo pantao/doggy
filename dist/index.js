@@ -30,6 +30,8 @@ var to = __importStar(require("./to"));
 exports.to = to;
 var datetime = __importStar(require("./datetime"));
 exports.datetime = datetime;
+var version = __importStar(require("./version"));
+exports.version = version;
 var luhn_1 = __importDefault(require("./luhn"));
 exports.luhn = luhn_1.default;
 var UrlTemplate_1 = __importDefault(require("./UrlTemplate"));
@@ -48,6 +50,7 @@ exports.default = {
     utils: utils,
     validators: validators,
     luhn: luhn_1.default,
+    version: version,
     UrlTemplate: UrlTemplate_1.default,
     Currency: Currency_1.default
 };
