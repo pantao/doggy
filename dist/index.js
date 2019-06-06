@@ -26,11 +26,17 @@ var utils = __importStar(require("./utils"));
 exports.utils = utils;
 var validators = __importStar(require("./validators"));
 exports.validators = validators;
+var to = __importStar(require("./to"));
+exports.to = to;
+var datetime = __importStar(require("./datetime"));
+exports.datetime = datetime;
 var luhn_1 = __importDefault(require("./luhn"));
 exports.luhn = luhn_1.default;
 exports.default = {
     formatters: formatters,
     is: is,
+    to: to,
+    datetime: datetime,
     object: object,
     base64: base64,
     constants: constants,
