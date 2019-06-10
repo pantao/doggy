@@ -1,3 +1,5 @@
+import { decode as base64Decode } from "./base64";
+
 export const removeNonChars = (variableName: string): string[] =>
   variableName.replace(/^\W+|\W+$/g, "").split(/,/);
 
@@ -73,4 +75,28 @@ export const uniqueId = (length?: number, radix = 16): string => {
     }
   }
   return segments.join("");
+};
+
+/**
+ * 为 authorization token 添加类型前缀
+ *
+ * @param authorization token
+ */
+export const withAuthorizationPrefix = (authorization: string): string => {
+  if (/^(basic|bearer|token) /i.test(authorization)) {
+    return authorization;
+  }
+
+  // TODO: 还需要增加对 basic authorization 的支持，判断方法是尝试将 authorization 按 base64 decode，若有结果则为 basic
+  try {
+    if (/^[\w-]+:/.test(base64Decode(authorization))) {
+      return `basic ${authorization}`;
+    }
+  } catch (_) {}
+
+  if (authorization.split(/\./).length === 3) {
+    return `bearer ${authorization}`;
+  }
+
+  return `token ${authorization}`;
 };

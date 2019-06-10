@@ -24,4 +24,10 @@ export declare const addQueryParameters: (url: string, parameters?: {
  * @param radix number
  */
 export declare const uniqueId: (length?: number | undefined, radix?: number) => string;
+/**
+ * 为 authorization token 添加类型前缀
+ *
+ * @param authorization token
+ */
+export declare const withAuthorizationPrefix: (authorization: string) => string;
 //# sourceMappingURL=utils.d.ts.map

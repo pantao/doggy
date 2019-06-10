@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var base64_1 = require("./base64");
 exports.removeNonChars = function (variableName) {
     return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
 };
@@ -62,4 +63,25 @@ exports.uniqueId = function (length, radix) {
         }
     }
     return segments.join("");
+};
+/**
+ * 为 authorization token 添加类型前缀
+ *
+ * @param authorization token
+ */
+exports.withAuthorizationPrefix = function (authorization) {
+    if (/^(basic|bearer|token) /i.test(authorization)) {
+        return authorization;
+    }
+    // TODO: 还需要增加对 basic authorization 的支持，判断方法是尝试将 authorization 按 base64 decode，若有结果则为 basic
+    try {
+        if (/^[\w-]+:/.test(base64_1.decode(authorization))) {
+            return "basic " + authorization;
+        }
+    }
+    catch (_) { }
+    if (authorization.split(/\./).length === 3) {
+        return "bearer " + authorization;
+    }
+    return "token " + authorization;
 };
