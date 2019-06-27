@@ -34,6 +34,8 @@ var version = __importStar(require("./version"));
 exports.version = version;
 var func = __importStar(require("./func"));
 exports.func = func;
+var http = __importStar(require("./http"));
+exports.http = http;
 var luhn_1 = __importDefault(require("./luhn"));
 exports.luhn = luhn_1.default;
 var UrlTemplate_1 = __importDefault(require("./UrlTemplate"));
@@ -55,5 +57,6 @@ exports.default = {
     version: version,
     UrlTemplate: UrlTemplate_1.default,
     Currency: Currency_1.default,
-    func: func
+    func: func,
+    http: http
 };
