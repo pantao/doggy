@@ -11,16 +11,32 @@ export declare const lowercaseKeys: (object: {
 };
 export declare const omit: (object: {
     [key: string]: any;
-}, keysToOmit: string[]) => {};
-/**
- * 为认证字串添加前缀
- *
- * @param {String} authorization 认证字串
- */
-export declare const withAuthorizationPrefix: (authorization: string) => string;
+}, keysToOmit: string[]) => any;
 /**
  * 将值转换成为类型名称（小写字母）
  *
  * @param {any} object 待转换的值
  */
+export declare const classToType: (object: any) => string;
+/**
+ * 将多个对象合并成一个对象
+ *
+ * @param objects object[]
+ */
+export declare const merge: (...objects: any[]) => any;
+/**
+ * 深合并
+ *
+ * @param objects object[]
+ */
+export declare const deepMerge: (...objects: any[]) => any;
+/**
+ * Extend object
+ *
+ * @param a Object
+ * @param b Object
+ * @param self bind object
+ */
+export declare const extend: (a: any, b: any, self: any) => any;
+export declare const deepExtend: (this: void, ...args: any) => any;
 //# sourceMappingURL=object.d.ts.map

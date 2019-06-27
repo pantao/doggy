@@ -1,4 +1,6 @@
-import * as base64 from "./base64";
+import { eachCall } from "./utils";
+import { bind } from "./func";
+import { array as isArray, plainObject as isPlainObject } from "./is";
 
 export const deepEqual: (a: any, b: any) => boolean = (a, b) => {
   if (a === b) {
@@ -53,186 +55,140 @@ export const omit = (
         ...obj,
         [key]: object[key]
       }),
-      {}
+      {} as any
     );
-
-/**
- * 为认证字串添加前缀
- *
- * @param {String} authorization 认证字串
- */
-export const withAuthorizationPrefix = (authorization: string) => {
-  if (/^(basic|bearer|token) /i.test(authorization)) {
-    return authorization;
-  }
-
-  try {
-    // TODO: 这里需要从 `./helpers.js` 中定义一个能适配各个平台的 `atob` 方法
-    if (/^[\w-]+:/.test(base64.decode(authorization))) {
-      return `basic ${authorization}`;
-    }
-    // eslint-disable-next-line no-empty
-  } catch (eror) {}
-
-  if (authorization.split(/\./).length === 3) {
-    return `bearer ${authorization}`;
-  }
-
-  return `token ${authorization}`;
-};
 
 /**
  * 将值转换成为类型名称（小写字母）
  *
  * @param {any} object 待转换的值
  */
-// export const classToType = (object: any): string =>
-//   "Boolean Number String Function Array Date RegExp Object"
-//     .split(" ")
-//     .map(c => [`[object ${c}]`, c.toLowerCase()])
-//     .reduce((a, b) => ({ ...a, [b[0]]: b[1] }), {})[
-//     Object.prototype.toString.call(object)
-//   ];
+export const classToType = (object: any): string =>
+  "Boolean Number String Function Array Date RegExp Object"
+    .split(" ")
+    .map(c => [`[object ${c}]`, c.toLowerCase()])
+    .reduce((a, b) => ({ ...a, [b[0]]: b[1] }), {} as any)[
+    Object.prototype.toString.call(object)
+  ];
 
-// /**
-//  * 包装函数为单次执行函数
-//  *
-//  * ```js
-//  * const fn = (a, b) => a + b
-//  * const ofn = once(fn)
-//  *
-//  * console.log(ofn(1, 2)) // => 3
-//  * console.log(ofn(2, 5)) // => 3
-//  *
-//  * const ofns = once(fn, true)
-//  *
-//  * console.log(ofns(1, 2)) // => 3
-//  * console.log(ofns(2, 5)) // => Uncaught Error: fn shouldn't be called more than once
-//  * ```
-//  *
-//  * @param {Function} fn 该包装的函数
-//  * @param {Boolean} strict 是否严格模式
-//  */
-// export const once = (fn, strict = false) => {
-//   const fun = (...args) => {
-//     if (fun.called) {
-//       if (strict) {
-//         throw new Error(fun.onceError)
-//       }
-//       return fun.value
-//     }
-//     fun.called = true
-//     fun.value = fn.apply(this, args)
-//     return fun.value
-//   }
+/**
+ * 将多个对象合并成一个对象
+ *
+ * @param objects object[]
+ */
+export const merge = (...objects: any[]): any => {
+  const merged: any = {};
 
-//   const name = fn.name || 'Function wrapped with "once"'
-//   fun.onceError = `${name} shouldn't be called more than once`
-//   fun.called = false
-//   return fun
-// }
+  const assignValue = (value: any, key: string) => {
+    if (typeof merged[key] === "object" && typeof value === "object") {
+      merged[key] = merge(merged[key], value);
+    } else {
+      merged[key] = value;
+    }
+  };
 
-// /**
-//  * 节流
-//  *
-//  * @param {Function} fn 需要节流的函数
-//  * @param {Number} wait 阈值
-//  */
-// export const throttle = (fn, wait = 250) => {
-//   let pending = false
-//   let result
+  for (let i = 0, l = objects.length; i < l; i += 1) {
+    eachCall(objects[i], assignValue);
+  }
 
-//   return (...args) => {
-//     if (pending) {
-//       return result
-//     }
+  return merged;
+};
 
-//     pending = true
+/**
+ * 深合并
+ *
+ * @param objects object[]
+ */
+export const deepMerge = (...objects: any[]): any => {
+  const merged: any = {};
+  const assignValue = (value: any, key: string) => {
+    if (typeof merged[key] === "object" && typeof value === "object") {
+      merged[key] = deepMerge(merged[key], value);
+    } else if (typeof value === "object") {
+      merged[key] = deepMerge({}, value);
+    } else {
+      merged[key] = value;
+    }
+  };
 
-//     result = fn.call(...args)
+  for (let i = 0, l = objects.length; i < l; i += 1) {
+    eachCall(objects[i], assignValue);
+  }
 
-//     setTimeout(() => {
-//       pending = false
-//     }, wait)
+  return merged;
+};
 
-//     return result
-//   }
-// }
+/**
+ * Extend object
+ *
+ * @param a Object
+ * @param b Object
+ * @param self bind object
+ */
+export const extend = (a: any, b: any, self: any): any => {
+  eachCall(b, function assignValue(value: any, key: string) {
+    if (self && typeof value === "function") {
+      a[key] = bind(value, self);
+    } else {
+      a[key] = value;
+    }
+  });
+  return a;
+};
 
-// /**
-//  * 防抖
-//  *
-//  * @param {Function} fn 需要防抖的函数
-//  * @param {Number} wait 阈值
-//  */
-// export const debounce = (fn, wait = 250) => {
-//   let timerId
+export const deepExtend = function deepExtend(this: void, ...args: any): any {
+  let options;
+  let name;
+  let src;
+  let copy;
+  let copyIsArray;
+  let clone;
+  let target: any = self;
+  let i = 1;
+  const { length } = args;
+  let deep = false;
 
-//   return (...args) => {
-//     if (timerId) {
-//       clearTimeout(timerId)
+  if (typeof target === "boolean") {
+    deep = target;
+    target = args[1] || {};
+    i = 2;
+  }
 
-//       timerId = null
-//     }
-//     timerId = setTimeout(() => {
-//       fn.call(...args)
-//     }, wait)
-//   }
-// }
+  if (Object(target) !== target && classToType(target) !== "function") {
+    target = {} as any;
+  }
+  if (length === i) {
+    target = this;
+    i -= 1;
+  }
 
-// export const extend = (...args) => {
-//   let options;
-//   let name;
-//   let src;
-//   let copy;
-//   let copyIsArray;
-//   let clone;
-//   let target = args[0] || {};
-//   let i = 1;
-//   const { length } = args;
-//   let deep = false;
+  for (; i < length; i += 1) {
+    options = args[i];
+    if (options !== null) {
+      const keys = Object.keys(options);
+      for (i = 0; i < keys.length; i += 1) {
+        name = keys[i];
+        src = target[name];
+        copy = options[name];
 
-//   if (typeof target === "boolean") {
-//     deep = target;
-//     target = args[1] || {};
-//     i = 2;
-//   }
+        if (target !== copy) {
+          copyIsArray = isArray(copy);
+          if (deep && copy && (isPlainObject(copy) || copyIsArray)) {
+            if (copyIsArray) {
+              copyIsArray = false;
+              clone = src && isArray(src) ? src : [];
+            } else {
+              clone = src && isPlainObject(src) ? src : {};
+            }
 
-//   if (Object(target) !== target && classToType(target) !== "function") {
-//     target = {};
-//   }
-//   if (length === i) {
-//     target = this;
-//     i -= 1;
-//   }
+            target[name] = deepExtend(deep, clone, copy);
+          } else if (copy !== undefined) {
+            target[name] = copy;
+          }
+        }
+      }
+    }
+  }
 
-//   for (; i < length; i += 1) {
-//     options = args[i];
-//     if (options !== null) {
-//       const keys = Object.keys(options);
-//       for (i = 0; i < keys.length; i += 1) {
-//         name = keys[i];
-//         src = target[name];
-//         copy = options[name];
-
-//         if (target !== copy) {
-//           copyIsArray = isArray(copy);
-//           if (deep && copy && (isPlainObject(copy) || copyIsArray)) {
-//             if (copyIsArray) {
-//               copyIsArray = false;
-//               clone = src && isArray(src) ? src : [];
-//             } else {
-//               clone = src && isPlainObject(src) ? src : {};
-//             }
-
-//             target[name] = extend(deep, clone, copy);
-//           } else if (copy !== undefined) {
-//             target[name] = copy;
-//           }
-//         }
-//       }
-//     }
-//   }
-
-//   return target;
-// };
+  return target;
+};

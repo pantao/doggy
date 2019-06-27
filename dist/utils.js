@@ -5,6 +5,14 @@ exports.removeNonChars = function (variableName) {
     return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
 };
 /**
+ * 清除字符串前后的空白字符
+ *
+ * @param value string
+ */
+exports.trim = function (value) {
+    return value.replace(/^\s*/, "").replace(/\s*$/, "");
+};
+/**
  * 解析 url 地址中的变量名称
  *
  * @param {String} url URL地址
@@ -84,4 +92,48 @@ exports.withAuthorizationPrefix = function (authorization) {
         return "bearer " + authorization;
     }
     return "token " + authorization;
+};
+exports.getBytes = function (str) {
+    var bytes = [];
+    for (var i = 0; i < str.length; i++) {
+        bytes.push(str.charCodeAt(i));
+    }
+    return bytes;
+};
+exports.getPRCCitizenIDCheckCode = function (value) {
+    var factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+    var parity = [1, 0, "X", 9, 8, 7, 6, 5, 4, 3, 2];
+    if (/[\d]{17}/.test(value)) {
+        var parityIndex = value
+            .substring(0, 17)
+            .split("")
+            .map(function (number, index) { return parseInt(number) * factor[index]; })
+            .reduce(function (a, b) { return a + b; }, 0) % 11;
+        return "" + parity[parityIndex];
+    }
+    return "";
+};
+/**
+ * 遍历数组或者对象，将其元素或者所有属性的值都传递给 `fn` 并执行
+ *
+ * @param object any
+ * @param fn Function
+ */
+exports.eachCall = function (object, fn) {
+    if (object === null || typeof object === "undefined") {
+        return;
+    }
+    var reassigned = typeof object !== "object" ? [object] : object;
+    if (Array.isArray(reassigned)) {
+        for (var i = 0, l = object.length; i < l; i += 1) {
+            fn.call(null, reassigned[i], i, reassigned);
+        }
+    }
+    else {
+        for (var key in reassigned) {
+            if (Object.prototype.hasOwnProperty.call(reassigned, key)) {
+                fn.call(null, reassigned[key], key, reassigned);
+            }
+        }
+    }
 };

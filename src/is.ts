@@ -2,6 +2,8 @@ import * as patterns from "./patterns";
 import { prcCitizenID as validatePRCCitizenID } from "./validators";
 export type IsFunction = (value: any, ...options: any) => boolean;
 
+const { toString } = Object.prototype;
+
 /**
  * 检测一个字符串是否为手机号
  *
@@ -122,13 +124,46 @@ export const rgba: IsFunction = (value: any) => patterns.RGBA.test(value);
 
 export const rgbOrRgba: IsFunction = (value: any) => rgb(value) || rgba(value);
 
+/**
+ * 判断值是否为一个合法的颜色值
+ * @param value any
+ */
 export const color: IsFunction = (value: any) =>
   rgbOrRgba(value) || hexOrHexa(value);
 
+/**
+ * 判断值是否为 Array
+ * @param value any
+ */
 export const array: IsFunction = (value: any) =>
   Array.isArray
     ? Array.isArray(value)
-    : Object.prototype.toString.call(value) === "[object Array]";
+    : toString.call(value) === "[object Array]";
+
+/**
+ * 判断值是否为 ArrayBuffer
+ * @param value any
+ */
+export const arrayBuffer: IsFunction = (value: any) =>
+  toString.call(value) === "[object ArrayBuffer]";
+
+/**
+ * 判断值是否为 FormData
+ * @param value any
+ */
+export const formData: IsFunction = (value: any) =>
+  typeof FormData !== "undefined" && value instanceof FormData;
+
+/**
+ * 检测一个值是否为 ArrayBuffer view
+ * @param value any
+ */
+export const arrayBufferView: IsFunction = (value: any) => {
+  if (typeof ArrayBuffer !== "undefined" && ArrayBuffer.isView) {
+    return ArrayBuffer.isView(value);
+  }
+  return value && value.buffer && value.buffer instanceof ArrayBuffer;
+};
 
 /**
  * 测试一个值是否是对象
@@ -139,19 +174,33 @@ export const object: IsFunction = (value: any) =>
   value != null && typeof value === "object" && Array.isArray(value) === false;
 
 /**
+ * 检测一个值是否为文件
+ *
+ * @param value any
+ */
+export const file: IsFunction = (value: any) =>
+  toString.call(value) === "[object File]";
+
+/**
+ * 检测一个值是否为 Blob
+ * @param value any
+ */
+export const blob: IsFunction = (value: any) =>
+  toString.call(value) === "[object Blob]";
+
+/**
  * 测试一个值是否是 Object 对象
  *
  * ```js
  * function fun () {}
  *
- * console.log(Object.prototype.toString.call(fun)) // => [object Function]
+ * console.log(toString.call(fun)) // => [object Function]
  * ```
  *
  * @param {any} value 待检测的值
  */
 export const objectObject: IsFunction = (value: any) =>
-  object(value) === true &&
-  Object.prototype.toString.call(value) === "[object Object]";
+  object(value) === true && toString.call(value) === "[object Object]";
 
 /**
  * 测试一个值是否是 纯对象
@@ -184,19 +233,37 @@ export const plainObject: IsFunction = (value: any) => {
  * @param {any} fn 待检测值
  */
 export const func: IsFunction = (fn: any) =>
-  fn && Object.prototype.toString.call(fn) === "[object Function]";
+  fn && toString.call(fn) === "[object Function]";
 
 /**
  * 检测一个值是否为异步函数（AsyncFunction）
  * @param {any} fn 待检测值
  */
 export const asyncFunc: IsFunction = (fn: any) =>
-  fn && Object.prototype.toString.call(fn) === "[object AsyncFunction]";
+  fn && toString.call(fn) === "[object AsyncFunction]";
 
 export const string: IsFunction = (value: any) => typeof value === "string";
 
+export const undef: IsFunction = (value: any) => typeof value === "undefined";
+
 export const regexp: IsFunction = (value: any) =>
-  Object.prototype.toString.call(value) === "[object RegExp]";
+  toString.call(value) === "[object RegExp]";
+
+/**
+ * 是否为 Stream
+ *
+ * @param value any
+ */
+export const stream: IsFunction = (value: any) =>
+  object(value) && func(value.pipe);
+
+/**
+ * 是否为 URLSearchParams
+ *
+ * @param value any
+ */
+export const urlSearchParams: IsFunction = (value: any) =>
+  typeof URLSearchParams !== "undefined" && value instanceof URLSearchParams;
 
 /**
  * 是否是可打印字
@@ -218,3 +285,18 @@ export const printableChar: IsFunction = (value: any) =>
  */
 export const prcCitizenID: IsFunction = (value: any, strict = true) =>
   strict ? validatePRCCitizenID(value) : patterns.PRC_CITIZEN_ID.test(value);
+
+/**
+ * 检测当前环境是否为标准的浏览器环境
+ */
+export const standardBrowserEnvironment: IsFunction = () => {
+  if (
+    typeof navigator !== "undefined" &&
+    (navigator.product === "ReactNative" ||
+      navigator.product === "NativeScript" ||
+      navigator.product === "NS")
+  ) {
+    return false;
+  }
+  return typeof window !== "undefined" && typeof document !== "undefined";
+};

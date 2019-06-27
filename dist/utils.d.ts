@@ -1,5 +1,11 @@
 export declare const removeNonChars: (variableName: string) => string[];
 /**
+ * 清除字符串前后的空白字符
+ *
+ * @param value string
+ */
+export declare const trim: (value: string) => string;
+/**
  * 解析 url 地址中的变量名称
  *
  * @param {String} url URL地址
@@ -30,4 +36,13 @@ export declare const uniqueId: (length?: number | undefined, radix?: number) => 
  * @param authorization token
  */
 export declare const withAuthorizationPrefix: (authorization: string) => string;
+export declare const getBytes: (str: string) => number[];
+export declare const getPRCCitizenIDCheckCode: (value: string) => string;
+/**
+ * 遍历数组或者对象，将其元素或者所有属性的值都传递给 `fn` 并执行
+ *
+ * @param object any
+ * @param fn Function
+ */
+export declare const eachCall: (object: any, fn: Function) => void;
 //# sourceMappingURL=utils.d.ts.map

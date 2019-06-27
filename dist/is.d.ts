@@ -92,8 +92,31 @@ export declare const hexOrHexa: IsFunction;
 export declare const rgb: IsFunction;
 export declare const rgba: IsFunction;
 export declare const rgbOrRgba: IsFunction;
+/**
+ * 判断值是否为一个合法的颜色值
+ * @param value any
+ */
 export declare const color: IsFunction;
+/**
+ * 判断值是否为 Array
+ * @param value any
+ */
 export declare const array: IsFunction;
+/**
+ * 判断值是否为 ArrayBuffer
+ * @param value any
+ */
+export declare const arrayBuffer: IsFunction;
+/**
+ * 判断值是否为 FormData
+ * @param value any
+ */
+export declare const formData: IsFunction;
+/**
+ * 检测一个值是否为 ArrayBuffer view
+ * @param value any
+ */
+export declare const arrayBufferView: IsFunction;
 /**
  * 测试一个值是否是对象
  *
@@ -101,12 +124,23 @@ export declare const array: IsFunction;
  */
 export declare const object: IsFunction;
 /**
+ * 检测一个值是否为文件
+ *
+ * @param value any
+ */
+export declare const file: IsFunction;
+/**
+ * 检测一个值是否为 Blob
+ * @param value any
+ */
+export declare const blob: IsFunction;
+/**
  * 测试一个值是否是 Object 对象
  *
  * ```js
  * function fun () {}
  *
- * console.log(Object.prototype.toString.call(fun)) // => [object Function]
+ * console.log(toString.call(fun)) // => [object Function]
  * ```
  *
  * @param {any} value 待检测的值
@@ -130,7 +164,20 @@ export declare const func: IsFunction;
  */
 export declare const asyncFunc: IsFunction;
 export declare const string: IsFunction;
+export declare const undef: IsFunction;
 export declare const regexp: IsFunction;
+/**
+ * 是否为 Stream
+ *
+ * @param value any
+ */
+export declare const stream: IsFunction;
+/**
+ * 是否为 URLSearchParams
+ *
+ * @param value any
+ */
+export declare const urlSearchParams: IsFunction;
 /**
  * 是否是可打印字
  *
@@ -142,4 +189,8 @@ export declare const printableChar: IsFunction;
  * @param value any
  */
 export declare const prcCitizenID: IsFunction;
+/**
+ * 检测当前环境是否为标准的浏览器环境
+ */
+export declare const standardBrowserEnvironment: IsFunction;
 //# sourceMappingURL=is.d.ts.map

@@ -9,6 +9,7 @@ import * as validators from "./validators";
 import * as to from "./to";
 import * as datetime from "./datetime";
 import * as version from "./version";
+import * as func from "./func";
 
 import luhn from "./luhn";
 
@@ -29,7 +30,8 @@ export {
   luhn,
   version,
   UrlTemplate,
-  Currency
+  Currency,
+  func
 };
 
 export default {
@@ -46,5 +48,6 @@ export default {
   luhn,
   version,
   UrlTemplate,
-  Currency
+  Currency,
+  func
 };

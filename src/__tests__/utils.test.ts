@@ -10,4 +10,5 @@ test("test utils.withAuthorizationPrefix()", () => {
   expect(utils.withAuthorizationPrefix(base64.encode("user:pass"))).toBe(
     `basic ${base64.encode("user:pass")}`
   );
+  expect(utils.getPRCCitizenIDCheckCode("11010519491231002")).toBe("X");
 });

@@ -9,6 +9,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var patterns = __importStar(require("./patterns"));
 var validators_1 = require("./validators");
+var toString = Object.prototype.toString;
 /**
  * 检测一个字符串是否为手机号
  *
@@ -119,13 +120,45 @@ exports.hexOrHexa = function (value) {
 exports.rgb = function (value) { return patterns.RGB.test(value); };
 exports.rgba = function (value) { return patterns.RGBA.test(value); };
 exports.rgbOrRgba = function (value) { return exports.rgb(value) || exports.rgba(value); };
+/**
+ * 判断值是否为一个合法的颜色值
+ * @param value any
+ */
 exports.color = function (value) {
     return exports.rgbOrRgba(value) || exports.hexOrHexa(value);
 };
+/**
+ * 判断值是否为 Array
+ * @param value any
+ */
 exports.array = function (value) {
     return Array.isArray
         ? Array.isArray(value)
-        : Object.prototype.toString.call(value) === "[object Array]";
+        : toString.call(value) === "[object Array]";
+};
+/**
+ * 判断值是否为 ArrayBuffer
+ * @param value any
+ */
+exports.arrayBuffer = function (value) {
+    return toString.call(value) === "[object ArrayBuffer]";
+};
+/**
+ * 判断值是否为 FormData
+ * @param value any
+ */
+exports.formData = function (value) {
+    return typeof FormData !== "undefined" && value instanceof FormData;
+};
+/**
+ * 检测一个值是否为 ArrayBuffer view
+ * @param value any
+ */
+exports.arrayBufferView = function (value) {
+    if (typeof ArrayBuffer !== "undefined" && ArrayBuffer.isView) {
+        return ArrayBuffer.isView(value);
+    }
+    return value && value.buffer && value.buffer instanceof ArrayBuffer;
 };
 /**
  * 测试一个值是否是对象
@@ -136,19 +169,33 @@ exports.object = function (value) {
     return value != null && typeof value === "object" && Array.isArray(value) === false;
 };
 /**
+ * 检测一个值是否为文件
+ *
+ * @param value any
+ */
+exports.file = function (value) {
+    return toString.call(value) === "[object File]";
+};
+/**
+ * 检测一个值是否为 Blob
+ * @param value any
+ */
+exports.blob = function (value) {
+    return toString.call(value) === "[object Blob]";
+};
+/**
  * 测试一个值是否是 Object 对象
  *
  * ```js
  * function fun () {}
  *
- * console.log(Object.prototype.toString.call(fun)) // => [object Function]
+ * console.log(toString.call(fun)) // => [object Function]
  * ```
  *
  * @param {any} value 待检测的值
  */
 exports.objectObject = function (value) {
-    return exports.object(value) === true &&
-        Object.prototype.toString.call(value) === "[object Object]";
+    return exports.object(value) === true && toString.call(value) === "[object Object]";
 };
 /**
  * 测试一个值是否是 纯对象
@@ -179,18 +226,35 @@ exports.plainObject = function (value) {
  * @param {any} fn 待检测值
  */
 exports.func = function (fn) {
-    return fn && Object.prototype.toString.call(fn) === "[object Function]";
+    return fn && toString.call(fn) === "[object Function]";
 };
 /**
  * 检测一个值是否为异步函数（AsyncFunction）
  * @param {any} fn 待检测值
  */
 exports.asyncFunc = function (fn) {
-    return fn && Object.prototype.toString.call(fn) === "[object AsyncFunction]";
+    return fn && toString.call(fn) === "[object AsyncFunction]";
 };
 exports.string = function (value) { return typeof value === "string"; };
+exports.undef = function (value) { return typeof value === "undefined"; };
 exports.regexp = function (value) {
-    return Object.prototype.toString.call(value) === "[object RegExp]";
+    return toString.call(value) === "[object RegExp]";
+};
+/**
+ * 是否为 Stream
+ *
+ * @param value any
+ */
+exports.stream = function (value) {
+    return exports.object(value) && exports.func(value.pipe);
+};
+/**
+ * 是否为 URLSearchParams
+ *
+ * @param value any
+ */
+exports.urlSearchParams = function (value) {
+    return typeof URLSearchParams !== "undefined" && value instanceof URLSearchParams;
 };
 /**
  * 是否是可打印字
@@ -213,4 +277,16 @@ exports.printableChar = function (value) {
 exports.prcCitizenID = function (value, strict) {
     if (strict === void 0) { strict = true; }
     return strict ? validators_1.prcCitizenID(value) : patterns.PRC_CITIZEN_ID.test(value);
+};
+/**
+ * 检测当前环境是否为标准的浏览器环境
+ */
+exports.standardBrowserEnvironment = function () {
+    if (typeof navigator !== "undefined" &&
+        (navigator.product === "ReactNative" ||
+            navigator.product === "NativeScript" ||
+            navigator.product === "NS")) {
+        return false;
+    }
+    return typeof window !== "undefined" && typeof document !== "undefined";
 };
